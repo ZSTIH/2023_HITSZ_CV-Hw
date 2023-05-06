@@ -21,6 +21,7 @@ def load(image_path):
     ### YOUR CODE HERE
     # Use skimage io.imread
     pass
+    out = io.imread(image_path)
     ### END YOUR CODE
 
     # Let's convert the image to be between the correct range.
@@ -46,6 +47,7 @@ def crop_image(image, start_row, start_col, num_rows, num_cols):
 
     ### YOUR CODE HERE
     pass
+    out = image[start_row:start_row+num_rows, start_col:start_col+num_cols]
     ### END YOUR CODE
 
     return out
@@ -69,6 +71,7 @@ def dim_image(image):
 
     ### YOUR CODE HERE
     pass
+    out = 0.5 * np.square(image)
     ### END YOUR CODE
 
     return out
@@ -97,6 +100,14 @@ def resize_image(input_image, output_rows, output_cols):
 
     ### YOUR CODE HERE
     pass
+    row_scale_factor = output_rows / input_rows
+    col_scale_factor = output_cols / input_cols
+    for channel in range(channels):
+        for j in range(output_cols):
+            for i in range(output_rows):
+                input_i = int(i / row_scale_factor)
+                input_j = int(j / col_scale_factor)
+                output_image[i, j, channel] = input_image[input_i, input_j, channel]
     ### END YOUR CODE
 
     # 3. Return the output image
@@ -120,6 +131,8 @@ def rotate2d(point, theta):
 
     ## YOUR CODE HERE
     pass
+    rotate_matrix = np.array([[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]])
+    return np.matmul(rotate_matrix, point)
     ### END YOUR CODE
 
 
@@ -142,6 +155,20 @@ def rotate_image(input_image, theta):
 
     ## YOUR CODE HERE
     pass
+    center_row = input_rows / 2
+    center_col = input_cols / 2
+    for channel in range(channels):
+        for i in range(input_rows):
+            for j in range(input_cols):
+                p = np.array([i, j])
+                center = np.array([center_row, center_col])
+                p1 = p - center
+                p2 = rotate2d(p1, theta)
+                p3 = p2 + center
+                new_i = int(p3[0])
+                new_j = int(p3[1])
+                if new_i >= 0 and new_i < input_rows and new_j >=0 and new_j < input_cols:
+                    output_image[i, j, channel] = input_image[new_i, new_j, channel]
     ### END YOUR CODE
 
     # 3. Return the output image

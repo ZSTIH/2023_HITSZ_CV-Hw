@@ -24,6 +24,7 @@ def dot_product(a, b):
     out = None
     ### YOUR CODE HERE
     pass
+    out = np.dot(a.T, b)
     ### END YOUR CODE
     return out
 
@@ -46,6 +47,9 @@ def complicated_matrix_function(M, a, b):
     out = None
     ### YOUR CODE HERE
     pass
+    temp1 = np.matmul(a.T, b)
+    temp2 = np.matmul(M, a)
+    out = np.multiply(temp1, temp2)
     ### END YOUR CODE
 
     return out
@@ -67,6 +71,7 @@ def eigen_decomp(M):
     v = None
     ### YOUR CODE HERE
     pass
+    w, v = np.linalg.eig(M)
     ### END YOUR CODE
     return w, v
 
@@ -97,6 +102,11 @@ def euclidean_distance_native(u, v):
 
     ### YOUR CODE HERE
     pass
+    s = 0
+    for i in range(len(u)):
+        s += (u[i] - v[i]) ** 2
+    ans = s ** 0.5
+    return ans
     ### END YOUR CODE
 
 
@@ -129,6 +139,10 @@ def euclidean_distance_numpy(u, v):
 
     ### YOUR CODE HERE
     pass
+    temp = (u - v) ** 2
+    temp = np.sum(temp)
+    ans = np.sqrt(temp)
+    return ans
     ### END YOUR CODE
 
 
@@ -153,5 +167,11 @@ def get_eigen_values_and_vectors(M, k):
     eigenvectors = []
     ### YOUR CODE HERE
     pass
+    w, v = eigen_decomp(M)
+    indexs = np.argsort(abs(w)) # 返回的是 abs(w) 进行从小到大排序后所得到的数组元素索引
+    indexs = indexs[-k:] # 取其中最大的 k 个的索引
+    indexs = indexs[::-1] # 原本升序排列，要转换为降序排列
+    eigenvalues += list(w[indexs])
+    eigenvectors += list(v[indexs])
     ### END YOUR CODE
     return eigenvalues, eigenvectors
