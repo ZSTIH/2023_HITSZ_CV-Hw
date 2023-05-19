@@ -28,6 +28,10 @@ def conv(image, kernel):
 
     ### YOUR CODE HERE
     pass
+    kernel = np.flip(np.flip(kernel, axis=0), axis=1)
+    for row in range(Hi):
+        for col in range(Wi):
+            out[row, col] = np.sum(kernel * padded[row : row + Hk, col : col + Wk])
     ### END YOUR CODE
 
     return out
@@ -53,6 +57,12 @@ def gaussian_kernel(size, sigma):
 
     ### YOUR CODE HERE
     pass
+    k = size // 2
+    for i in range(size):
+        for j in range(size):
+            kernel_x = np.exp(- (i - k) ** 2 / 2 / sigma ** 2) / np.sqrt(2 * np.pi) / sigma
+            kernel_y = np.exp(- (j - k) ** 2 / 2 / sigma ** 2) / np.sqrt(2 * np.pi) / sigma
+            kernel[i, j] = kernel_x * kernel_y
     ### END YOUR CODE
 
     return kernel
@@ -73,6 +83,9 @@ def partial_x(img):
 
     ### YOUR CODE HERE
     pass
+    kernel = [0.5, 0, -0.5]
+    kernel = np.array(kernel).reshape(1, 3)
+    out = conv(img, kernel)
     ### END YOUR CODE
 
     return out
@@ -93,6 +106,9 @@ def partial_y(img):
 
     ### YOUR CODE HERE
     pass
+    kernel = [0.5, 0, -0.5]
+    kernel = np.array(kernel).reshape(3, 1)
+    out = conv(img, kernel)
     ### END YOUR CODE
 
     return out
@@ -117,6 +133,10 @@ def gradient(img):
 
     ### YOUR CODE HERE
     pass
+    Gx = partial_x(img)
+    Gy = partial_y(img)
+    G = np.sqrt(Gx ** 2 + Gy ** 2)
+    theta = (np.arctan2(Gy, Gx) * 180 / np.pi + 360) % 360
     ### END YOUR CODE
 
     return G, theta
@@ -145,6 +165,51 @@ def non_maximum_suppression(G, theta):
     #print(G)
     ### BEGIN YOUR CODE
     pass
+    temp1 = 0
+    temp2 = 0
+    for row in range(H):
+        for col in range(W):
+            theta0 = theta[row, col]
+            if theta0 == 0 or theta0 == 180:
+                if col < W - 1:
+                    temp1 = G[row, col + 1]
+                else:
+                    temp1 = 0
+                if col > 0:
+                    temp2 = G[row, col - 1]
+                else:
+                    temp2 = 0
+            elif theta0 == 45 or theta0 == 225:
+                if row < H - 1 and col < W - 1:
+                    temp1 = G[row + 1, col + 1]
+                else:
+                    temp1 = 0
+                if row > 0 and col > 0:
+                    temp2 = G[row - 1, col - 1]
+                else:
+                    temp2 = 0
+            elif theta0 == 90 or theta0 == 270:
+                if row < H - 1:
+                    temp1 = G[row + 1, col]
+                else:
+                    temp1 = 0
+                if row > 0:
+                    temp2 = G[row - 1, col]
+                else:
+                    temp2 = 0
+            else:
+                if row > 0 and col < W - 1:
+                    temp1 = G[row - 1, col + 1]
+                else:
+                    temp1 = 0
+                if row < H - 1 and col > 0:
+                    temp2 = G[row + 1, col - 1]
+                else:
+                    temp2 = 0
+            if G[row, col] >= max(temp1, temp2):
+                out[row, col] = G[row, col]
+            else:
+                out[row, col] = 0
     ### END YOUR CODE
 
     return out
@@ -165,11 +230,13 @@ def double_thresholding(img, high, low):
             higher threshold and greater than the lower threshold.
     """
 
-    strong_edges = np.zeros(img.shape, dtype=np.bool)
-    weak_edges = np.zeros(img.shape, dtype=np.bool)
+    strong_edges = np.zeros(img.shape, dtype=bool)
+    weak_edges = np.zeros(img.shape, dtype=bool)
 
     ### YOUR CODE HERE
     pass
+    strong_edges = img > high
+    weak_edges = (img > low) & (img <= high)
     ### END YOUR CODE
 
     return strong_edges, weak_edges
@@ -220,7 +287,7 @@ def link_edges(strong_edges, weak_edges):
 
     H, W = strong_edges.shape
     indices = np.stack(np.nonzero(strong_edges)).T
-    edges = np.zeros((H, W), dtype=np.bool)
+    edges = np.zeros((H, W), dtype=bool)
 
     # Make new instances of arguments to leave the original
     # references intact
@@ -229,6 +296,16 @@ def link_edges(strong_edges, weak_edges):
 
     ### YOUR CODE HERE
     pass
+    flag = True
+    while flag:
+        flag = False
+        for indice in indices:
+            neighbours = get_neighbors(indice[0], indice[1], H, W)
+            for neighbour in neighbours:
+                if weak_edges[neighbour] and not edges[neighbour]:
+                    flag = True
+                    edges[neighbour] = True
+        indices = np.stack(np.nonzero(edges)).T
     ### END YOUR CODE
 
     return edges
@@ -247,6 +324,12 @@ def canny(img, kernel_size=5, sigma=1.4, high=20, low=15):
     """
     ### YOUR CODE HERE
     pass
+    kernel = gaussian_kernel(kernel_size, sigma)
+    new_img = conv(img, kernel)
+    G, theta = gradient(new_img)
+    nms_img = non_maximum_suppression(G, theta)
+    strong_edges, weak_edges = double_thresholding(nms_img, high, low)
+    edge = link_edges(strong_edges, weak_edges)
     ### END YOUR CODE
 
     return edge
