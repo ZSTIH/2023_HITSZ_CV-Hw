@@ -21,6 +21,16 @@ def conv_nested(image, kernel):
 
     ### YOUR CODE HERE
     pass
+    for h in range(Hi):
+        for w in range(Wi):
+            for i in range(Hk):
+                for j in range(Wk):
+                    row_image = h + 1 - i
+                    col_image = w + 1 - j
+                    if row_image >= 0 and col_image >= 0 and row_image < Hi and col_image < Wi:
+                        out[h, w] += image[row_image, col_image] * kernel[i, j]
+                    else:
+                        out[h, w] +=0
     ### END YOUR CODE
 
     return out
@@ -48,6 +58,7 @@ def zero_pad(image, pad_height, pad_width):
 
     ### YOUR CODE HERE
     pass
+    out = np.pad(image, ((pad_height, pad_height), (pad_width, pad_width)), 'constant', constant_values=0)
     ### END YOUR CODE
     return out
 
@@ -77,6 +88,13 @@ def conv_fast(image, kernel):
 
     ### YOUR CODE HERE
     pass
+    padding_h = Hk // 2
+    padding_w = Wk // 2
+    padding_image = zero_pad(image, padding_h, padding_w)
+    filpped_kernel = np.flip(np.flip(kernel, axis=0), axis=1)
+    for h in range(Hi):
+        for w in range(Wi):
+            out[h, w] = np.sum(padding_image[h : h + Hk, w : w + Wk] * filpped_kernel)
     ### END YOUR CODE
 
     return out
@@ -97,6 +115,7 @@ def cross_correlation(f, g):
     out = None
     ### YOUR CODE HERE
     pass
+    out = conv_fast(f, np.flip(np.flip(g, axis=0), axis=1))
     ### END YOUR CODE
 
     return out
@@ -119,6 +138,8 @@ def zero_mean_cross_correlation(f, g):
     out = None
     ### YOUR CODE HERE
     pass
+    new_g = g - np.mean(g)
+    out = conv_fast(f, np.flip(np.flip(new_g, axis=0), axis=1))
     ### END YOUR CODE
 
     return out
@@ -143,6 +164,20 @@ def normalized_cross_correlation(f, g):
     out = None
     ### YOUR CODE HERE
     pass
+    Hf, Wf = f.shape
+    Hg, Wg = g.shape
+    out = np.zeros((Hf, Wf))
+    g_mean = np.mean(g)
+    g_std = np.std(g)
+    new_g = (g - g_mean) / g_std
+    new_f = zero_pad(f, Hg // 2, Wg // 2)
+    for row in range(Hf):
+        for col in range(Wf):
+            f_patch = new_f[row : row + Hg, col : col + Wg]
+            f_patch_mean = np.mean(f_patch)
+            f_patch_std = np.std(f_patch)
+            new_f_patch = (f_patch - f_patch_mean) / f_patch_std
+            out[row, col] = np.sum(new_g * new_f_patch)
     ### END YOUR CODE
 
     return out
