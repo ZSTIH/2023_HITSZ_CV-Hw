@@ -48,15 +48,15 @@ $$
 $$
 \left\{
 \begin{align*}
-\frac{\partial{Y}}{\partial{x_{11}}} &= \frac{\partial{L}}{\partial{y_{11}}} \cdot w_{11} \\
-\frac{\partial{Y}}{\partial{x_{12}}} &= \frac{\partial{L}}{\partial{y_{11}}} \cdot w_{12} + \frac{\partial{L}}{\partial{y_{12}}} \cdot w_{11} \\
-\frac{\partial{Y}}{\partial{x_{13}}} &= \frac{\partial{L}}{\partial{y_{12}}} \cdot w_{12} \\
-\frac{\partial{Y}}{\partial{x_{21}}} &= \frac{\partial{L}}{\partial{y_{11}}} \cdot w_{21} + \frac{\partial{L}}{\partial{y_{21}}} \cdot w_{11} \\
-\frac{\partial{Y}}{\partial{x_{22}}} &= \frac{\partial{L}}{\partial{y_{11}}} \cdot w_{22} + \frac{\partial{L}}{\partial{y_{12}}} \cdot w_{21} + \frac{\partial{L}}{\partial{y_{21}}} \cdot w_{12} + \frac{\partial{L}}{\partial{y_{22}}} \cdot w_{11} \\
-\frac{\partial{Y}}{\partial{x_{23}}} &= \frac{\partial{L}}{\partial{y_{12}}} \cdot w_{22} + \frac{\partial{L}}{\partial{y_{22}}} \cdot w_{12} \\
-\frac{\partial{Y}}{\partial{x_{31}}} &= \frac{\partial{L}}{\partial{y_{21}}} \cdot w_{21} \\
-\frac{\partial{Y}}{\partial{x_{32}}} &= \frac{\partial{L}}{\partial{y_{21}}} \cdot w_{22} + \frac{\partial{L}}{\partial{y_{22}}} \cdot w_{21} \\
-\frac{\partial{Y}}{\partial{x_{33}}} &= \frac{\partial{L}}{\partial{y_{22}}} \cdot w_{22} \\
+\frac{\partial{L}}{\partial{x_{11}}} &= \frac{\partial{L}}{\partial{y_{11}}} \cdot w_{11} \\
+\frac{\partial{L}}{\partial{x_{12}}} &= \frac{\partial{L}}{\partial{y_{11}}} \cdot w_{12} + \frac{\partial{L}}{\partial{y_{12}}} \cdot w_{11} \\
+\frac{\partial{L}}{\partial{x_{13}}} &= \frac{\partial{L}}{\partial{y_{12}}} \cdot w_{12} \\
+\frac{\partial{L}}{\partial{x_{21}}} &= \frac{\partial{L}}{\partial{y_{11}}} \cdot w_{21} + \frac{\partial{L}}{\partial{y_{21}}} \cdot w_{11} \\
+\frac{\partial{L}}{\partial{x_{22}}} &= \frac{\partial{L}}{\partial{y_{11}}} \cdot w_{22} + \frac{\partial{L}}{\partial{y_{12}}} \cdot w_{21} + \frac{\partial{L}}{\partial{y_{21}}} \cdot w_{12} + \frac{\partial{L}}{\partial{y_{22}}} \cdot w_{11} \\
+\frac{\partial{L}}{\partial{x_{23}}} &= \frac{\partial{L}}{\partial{y_{12}}} \cdot w_{22} + \frac{\partial{L}}{\partial{y_{22}}} \cdot w_{12} \\
+\frac{\partial{L}}{\partial{x_{31}}} &= \frac{\partial{L}}{\partial{y_{21}}} \cdot w_{21} \\
+\frac{\partial{L}}{\partial{x_{32}}} &= \frac{\partial{L}}{\partial{y_{21}}} \cdot w_{22} + \frac{\partial{L}}{\partial{y_{22}}} \cdot w_{21} \\
+\frac{\partial{L}}{\partial{x_{33}}} &= \frac{\partial{L}}{\partial{y_{22}}} \cdot w_{22} \\
 \end{align*}
 \right.
 $$
@@ -74,10 +74,10 @@ $$
 $$
 \left\{
 \begin{align*}
-\frac{\partial{Y}}{\partial{w_{11}}} &= \frac{\partial{L}}{\partial{y_{11}}} \cdot x_{11} + \frac{\partial{L}}{\partial{y_{12}}} \cdot x_{21} \\
-\frac{\partial{Y}}{\partial{w_{12}}} &= \frac{\partial{L}}{\partial{y_{11}}} \cdot x_{12} + \frac{\partial{L}}{\partial{y_{12}}} \cdot x_{22} \\
-\frac{\partial{Y}}{\partial{w_{21}}} &= \frac{\partial{L}}{\partial{y_{21}}} \cdot x_{11} + \frac{\partial{L}}{\partial{y_{22}}} \cdot x_{21} \\
-\frac{\partial{Y}}{\partial{w_{22}}} &= \frac{\partial{L}}{\partial{y_{21}}} \cdot x_{12} + \frac{\partial{L}}{\partial{y_{22}}} \cdot x_{22} \\
+\frac{\partial{L}}{\partial{w_{11}}} &= \frac{\partial{L}}{\partial{y_{11}}} \cdot x_{11} + \frac{\partial{L}}{\partial{y_{12}}} \cdot x_{12} + \frac{\partial{L}}{\partial{y_{21}}} \cdot x_{21} + \frac{\partial{L}}{\partial{y_{22}}} \cdot x_{22} \\
+\frac{\partial{L}}{\partial{w_{12}}} &= \frac{\partial{L}}{\partial{y_{11}}} \cdot x_{12} + \frac{\partial{L}}{\partial{y_{12}}} \cdot x_{13} + \frac{\partial{L}}{\partial{y_{21}}} \cdot x_{22} + \frac{\partial{L}}{\partial{y_{22}}} \cdot x_{23} \\
+\frac{\partial{L}}{\partial{w_{21}}} &= \frac{\partial{L}}{\partial{y_{11}}} \cdot x_{21} + \frac{\partial{L}}{\partial{y_{12}}} \cdot x_{22} + \frac{\partial{L}}{\partial{y_{21}}} \cdot x_{31} + \frac{\partial{L}}{\partial{y_{22}}} \cdot x_{32} \\
+\frac{\partial{L}}{\partial{w_{22}}} &= \frac{\partial{L}}{\partial{y_{11}}} \cdot x_{22} + \frac{\partial{L}}{\partial{y_{12}}} \cdot x_{23} + \frac{\partial{L}}{\partial{y_{21}}} \cdot x_{32} + \frac{\partial{L}}{\partial{y_{22}}} \cdot x_{33} \\
 \end{align*}
 \right.
 $$
@@ -90,21 +90,27 @@ $$
 \frac{\partial{L}}{\partial{b}} = \frac{\partial{L}}{\partial{Y}} \cdot \frac{\partial{Y}}{\partial{b}}
 $$
 
-其中，$\frac{\partial{L}}{\partial{Y}}$ 是已知的，我们需要计算 $\frac{\partial{Y}}{\partial{b}}$。由于 $Y$ 的每个元素 $y_{ij}$ 与偏置 $b_{ij}$ 相加得到，因此可以得到以下计算过程：
+其中，$\frac{\partial{L}}{\partial{Y}}$ 是已知的，我们需要计算 $\frac{\partial{Y}}{\partial{b}}$。由于 $Y$ 的每个元素 $y_{ij}$ 是通过与偏置 $b_{ij}$ 相加得到的，因此可以得到以下计算过程：
 
 $$
 \left\{
 \begin{align*}
-\frac{\partial{Y}}{\partial{b_{11}}} &= \frac{\partial{L}}{\partial{y_{11}}} \\
-\frac{\partial{Y}}{\partial{b_{12}}} &= \frac{\partial{L}}{\partial{y_{12}}} \\
-\frac{\partial{Y}}{\partial{b_{21}}} &= \frac{\partial{L}}{\partial{y_{21}}} \\
-\frac{\partial{Y}}{\partial{b_{22}}} &= \frac{\partial{L}}{\partial{y_{22}}} \\
+\frac{\partial{L}}{\partial{b_{11}}} &= \frac{\partial{L}}{\partial{y_{11}}} \\
+\frac{\partial{L}}{\partial{b_{12}}} &= \frac{\partial{L}}{\partial{y_{12}}} \\
+\frac{\partial{L}}{\partial{b_{21}}} &= \frac{\partial{L}}{\partial{y_{21}}} \\
+\frac{\partial{L}}{\partial{b_{22}}} &= \frac{\partial{L}}{\partial{y_{22}}} \\
 \end{align*}
 \right.
 
 $$
 
 将上述计算结果整理成矩阵形式，即可得到关于偏置的梯度 $\frac{\partial{L}}{\partial{b}}$。
+
+不过，卷积层的同一个通道一般使用**相同的偏置值**，即 $b_{11}=b_{12}=b_{21}=b_{22}$ 。在这种情况下，关于偏置的梯度可进一步化为：
+
+$$
+\frac{\partial{L}}{\partial{b}} = \sum_{i=1}^{2} \sum_{j=1}^{2} \frac{\partial{L}}{\partial{y_{ij}}}
+$$
 
 综上所述，我们完成了卷积层的反向传播计算。
 
@@ -126,9 +132,7 @@ $$
 
 已知池化层输出$Y$的梯度为$\frac{\partial L}{\partial Y}$，其中$L$是损失函数。现在我们需要计算关于输入特征图$X$的梯度$\frac{\partial L}{\partial X}$。
 
-池化层的反向传播计算可以通过使用具有相同的池化窗口大小，但将最大值位置标记为1、其他位置标记为0的掩码矩阵来实现。将该掩码矩阵与池化层输出的梯度相乘，以便将梯度传递回池化层的输入。
-
-假设池化层的输出特征图为$Y$，其梯度为$\frac{\partial L}{\partial Y}$，其中$L$表示损失函数。设掩码矩阵为$M$，则反向传播的计算过程如下：
+池化层的反向传播计算可以通过使用**具有相同的池化窗口大小但将最大值位置标记为1、其他位置标记为0**的掩码矩阵来实现。将该掩码矩阵与池化层输出的梯度相乘，以便将梯度传递回池化层的输入。设掩码矩阵为$M_k$，则反向传播的计算过程如下：
 
 - 初始化与输入特征图相同尺寸的梯度矩阵$\frac{\partial L}{\partial X}$为全零矩阵。
 
@@ -140,7 +144,7 @@ $$
 
     - 在池化窗口$X_k^{'}$中找到最大值的位置，并将该位置在$M_k$中标记为1，其他位置标记为0。
 
-    - 将$\frac{\partial L}{\partial y_{ij}}$乘以掩码矩阵$M_k$，得到局部梯度$\frac{\partial L}{\partial X_k^{'}}$。
+    - 将$\frac{\partial L}{\partial y_{ij}}$乘以掩码矩阵$M_k$，得到局部梯度$\frac{\partial L}{\partial X_k^{'}} = \frac{\partial L}{\partial y_{ij}} \cdot M_k$。
 
     - 将局部梯度$\frac{\partial L}{\partial X_k^{'}}$加到$\frac{\partial L}{\partial X}$的相应位置上。
 
